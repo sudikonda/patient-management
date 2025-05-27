@@ -25,4 +25,10 @@ public class GlobalExceptionHandler {
         log.error(ex.getMessage());
         return ResponseEntity.badRequest().body(ex.getMessage());
     }
+
+    @ExceptionHandler(PatientNotFoundException.class)
+    public ResponseEntity<String> handlePatientNotFoundException(PatientNotFoundException ex) {
+        log.error(ex.getMessage());
+        return ResponseEntity.notFound().build();
+    }
 }

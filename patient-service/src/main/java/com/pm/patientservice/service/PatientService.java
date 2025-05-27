@@ -3,11 +3,13 @@ package com.pm.patientservice.service;
 import com.pm.patientservice.dto.PatientRequestDTO;
 import com.pm.patientservice.dto.PatientResponseDTO;
 import com.pm.patientservice.exception.EmailAlreadyExistsException;
+import com.pm.patientservice.exception.PatientNotFoundException;
 import com.pm.patientservice.mapper.PatientMapper;
 import com.pm.patientservice.model.Patient;
 import com.pm.patientservice.repository.PatientRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -36,5 +38,19 @@ public class PatientService {
         Patient savedPatient = patientRepository.save(patient);
         return PatientMapper.toPatientResponseDTO(savedPatient);
     }
+
+    public PatientResponseDTO updatePatient(String id, PatientRequestDTO patientRequestDTO) {
+        Patient patient = patientRepository.findById(UUID.fromString(id)).orElseThrow(() -> new PatientNotFoundException("Patient with id " + id + " not found"));
+
+        if (patientRequestDTO.getEmail() != null && patientRepository.existsByEmail(patientRequestDTO.getEmail())) {
+            throw new EmailAlreadyExistsException("Patient with email " + patientRequestDTO.getEmail() + " already exists");
+        }
+
+        Patient updatedPatient = PatientMapper.toUpdatedPatient(patientRequestDTO, patient);
+        Patient savePatient = patientRepository.save(updatedPatient);
+
+        return PatientMapper.toPatientResponseDTO(savePatient);
+    }
+
 
 }
