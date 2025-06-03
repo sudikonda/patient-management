@@ -1,6 +1,6 @@
 ## Login Request
-
-POST http://localhost:4005/login
+## API Gateway running on port 4004
+POST http://localhost:4004/auth/login
 Content-Type: application/json
 
 {

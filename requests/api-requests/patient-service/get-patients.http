@@ -1,5 +1,6 @@
 ### GET request to get all patients
 ## API gateway is running on port 4004
 GET http://localhost:4004/api/patients
+Authorization: Bearer {{token}}
 
 ###
